@@ -6,7 +6,8 @@ const session= require('express-session');
 var path =require('path');
 var exhbs=require('express-handlebars');
 const MongoClient = require('mongodb').MongoClient;
-const urlll = "mongodb://localhost:27017/";
+//const urlll = "mongodb://localhost:27017/";
+const urlll ="mongodb://junta:rootjunta123@ds117431.mlab.com:17431/doc_db";
 const cleanResults=require('./helper');
 const app =express();
 

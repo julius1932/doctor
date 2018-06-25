@@ -61,5 +61,4 @@ function cleanResults(results,searchValue,regxz){
   arr2=arr2.sort(sortMyArrays);
   return arr1.concat(arr2);
 }
-
 module.exports = cleanResults;
