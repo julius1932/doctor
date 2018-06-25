@@ -32,19 +32,20 @@ app.get('/api/providers',function(req,res){
    if(searchValue){
        searchValue=searchValue.toLowerCase();
    }
-  /*var str =searchValue;
+  var str =searchValue;
    var regxz;
   for (var i = 0; i < str.length; i++) {
     var rr='^'+str.substring(0, i+1)+'.'+str.substring(i+1, str.length)+'$';
     if(regxz){
-      regxz+='|'+rr;
+      regxz+=' '+rr;
     }else{
         regxz=rr;
     }
   }
-  console.log(regxz);*/
+  console.log(regxz);
    console.log(searchValue);
-  var query=  {$text: { $search: searchValue }};
+  var query=  {$text: { $search: regxz }};
+  //var query=  { $regex :{'Provider First Name': new RegExp(regxz) }};
   MongoClient.connect(urlll, function(rr, db) {
       if (rr) {isfound=false; return;};
       var dbo = db.db("doc_db");
@@ -52,7 +53,7 @@ app.get('/api/providers',function(req,res){
       dbo.collection("doctors").find(query).toArray(function(errr, reslts) {
           if (errr) {throw errr;return;}
             console.log(reslts.length);
-          var arr =cleanResults(reslts,searchValue);
+          var arr =cleanResults(reslts,searchValue,regxz);
           console.log(arr.length);
           //res.jsonp(arr);
            res.render('hom',{results :arr,num:arr.length});
