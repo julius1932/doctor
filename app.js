@@ -4,7 +4,7 @@ const bodyParser =require('body-parser');
 const cookieParser= require('cookie-parser');
 const session= require('express-session');
 var path =require('path');
-var exhbs=require('express-handlebars');
+//var exhbs=require('express-handlebars');
 const MongoClient = require('mongodb').MongoClient;
 //const urlll = "mongodb://localhost:27017/";
 const urlll ="mongodb://junta:rootjunta123@ds117431.mlab.com:17431/doc_db";
@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({extended:false}));
 // initialize cookie-parser to allow us access the cookies stored in the browser.
 app.use(cookieParser());
 
-app.set('views',path.join(__dirname,'views'));
+/*app.set('views',path.join(__dirname,'views'));
 app.engine('handlebars',exhbs({defaultLayout:'main'}));
-app.set('view engine','handlebars');
+app.set('view engine','handlebars');*/
 
 // Routes
 app.get('/providers',function(req,res){
@@ -56,8 +56,8 @@ app.get('/api/providers',function(req,res){
             console.log(reslts.length);
           var arr =cleanResults(reslts,searchValue,regxz);
           console.log(arr.length);
-          //res.jsonp(arr);
-           res.render('hom',{results :arr,num:arr.length});
+           res.jsonp(arr);
+          //res.render('hom',{results :arr,num:arr.length});
       });
     })
 });
