@@ -1,5 +1,5 @@
 const levenshtein = require('fast-levenshtein');
-const fields=['Provider First Name','Provider Last Name (Legal Name)'];
+const fields=['fc','ln'];
 
 function sortMyArrays(a,b) {
     return parseInt(a.distance) - parseInt(b.distance);
@@ -13,8 +13,8 @@ function cleanResults(results,searchValue,regxz){
   results.forEach(function(row){
     var drts=['dr','d.r','d.r.'];
 
-    if(row['Provider Credential Text'] && isNaN(row['Provider Credential Text'])&&drts.includes(row['Provider Credential Text'].toLowerCase())){
-         row['Provider Credential Text']= "M.D.";
+    if(row['pc'] && isNaN(row['pc'])&&drts.includes(row['pc'].toLowerCase())){
+         row['pc']= "M.D.";
     }
     fields.forEach(function(field){
 
@@ -52,7 +52,7 @@ function cleanResults(results,searchValue,regxz){
       });
       if(row.needed){
       }else{
-        row.needed=row['Provider First Name']+'<>'+row['Provider Last Name (Legal Name)']
+        row.needed=row['fn']+'<>'+row['fn'];
       }
        arr2.push(row);
     }

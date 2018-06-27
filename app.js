@@ -24,11 +24,11 @@ app.engine('handlebars',exhbs({defaultLayout:'main'}));
 app.set('view engine','handlebars');*/
 
 // Routes
-app.get('/providers',function(req,res){
-res.sendFile(__dirname+'/ui.html');
-});
+app.get("/",function(req,res){
+	  res.sendFile( __dirname+'/index.html');
+ });
 
-app.get('/api/providers',function(req,res){
+app.get('/providers',function(req,res){
    var searchValue =req.query.name;
    if(searchValue){
        searchValue=searchValue.toLowerCase();
@@ -50,12 +50,12 @@ app.get('/api/providers',function(req,res){
   MongoClient.connect(urlll, function(rr, db) {
       if (rr) {isfound=false; return;};
       var dbo = db.db("doc_db");
-      //dbo.collection("doctors").createIndex({ 'Provider First Name': "text",'Provider Last Name (Legal Name)':"text" });
-      dbo.collection("doctors").find(query).toArray(function(errr, reslts) {
+      dbo.collection("drs").createIndex({ 'fn': "text",'ln':"text" });
+      dbo.collection("drs").find(query).toArray(function(errr, reslts) {
           if (errr) {throw errr;return;}
             console.log(reslts.length);
-          var arr =cleanResults(reslts,searchValue,regxz);
-          console.log(arr.length);
+            var arr =cleanResults(reslts,searchValue,regxz);
+            console.log(arr.length);
            res.jsonp(arr);
           //res.render('hom',{results :arr,num:arr.length});
       });
