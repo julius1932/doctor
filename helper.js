@@ -1,5 +1,5 @@
 const levenshtein = require('fast-levenshtein');
-const fields=['fc','ln'];
+const fields=['fn','ln'];
 
 function sortMyArrays(a,b) {
     return parseInt(a.distance) - parseInt(b.distance);
