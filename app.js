@@ -43,14 +43,14 @@ app.get('/providers',function(req,res){
         regxz=rr;
     }
   }
-  console.log(regxz);
+  //console.log(regxz);
    console.log(searchValue);
   var query=  {$text: { $search: regxz }};
   //var query=  { $regex :{'Provider First Name': new RegExp(regxz) }};
   MongoClient.connect(urlll, function(rr, db) {
       if (rr) {isfound=false; return;};
       var dbo = db.db("doc_db");
-      dbo.collection("drs").createIndex({ 'fn': "text",'ln':"text" });
+      //dbo.collection("drs").createIndex({ 'fn': "text",'ln':"text" });
       dbo.collection("drs").find(query).toArray(function(errr, reslts) {
           if (errr) {throw errr;return;}
             console.log(reslts.length);
