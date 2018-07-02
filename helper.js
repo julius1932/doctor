@@ -8,9 +8,7 @@ function sortMyArrays(a,b) {
      }
      return dist;
 }
-function cleanResults(results,searchValue,regxz){
-  regxz = regxz.split(' ').join('|');
-  regxz=new RegExp(searchValue+'|'+regxz)
+function cleanResults(results,searchValue){
   var wrds =searchValue.split(' '); /* junk array */
   searchValue='';
   /* removing spaces between words*/
@@ -23,6 +21,7 @@ function cleanResults(results,searchValue,regxz){
   var arr1=[];  /* to holds start with part*/
   var arr2=[];  /* to hold contains but not start with*/
 
+ var pids=[];
   results.forEach(function(row){
     var drts=['dr','d.r','d.r.'];
 
@@ -66,8 +65,9 @@ function cleanResults(results,searchValue,regxz){
              }
           }
      }
-     if(row.needed){        /*find near match of the full name*/
+     if(row.needed && !pids.includes(row['pid'])){        /*find near match of the full name*/
          arr0.push(row);
+         pids.push(row.pid);
      }else{                 /* trying to match the parts since there is no match of full name */
       for(var k=0;k<2;k++){
         fields.forEach(function(field){
@@ -95,12 +95,14 @@ function cleanResults(results,searchValue,regxz){
            }
          });
        });
-       if(k===0 && row.needed){ /*it start with the search word */
+       if(k===0 && row.needed && !pids.includes(row['pid'])){ /*it start with the search word */
           arr1.push(row);
+          pids.push(row.pid);
            break;
        }
-       if(k===1 && row.needed){ /*contains some parts of search word */
+       if(k===1 && row.needed && !pids.includes(row['pid'])){ /*contains some parts of search word */
           arr2.push(row);
+          pids.push(row.pid);
        }
      }
    }
