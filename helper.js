@@ -30,6 +30,7 @@ function cleanResults(results,searchValue){
     }
     /* search phrase is made of two or more words */
     if(wrds.length>=2){
+       var swrds=[searchValue,wrds[1]+' '+wrds[0]];
        //console.log('====================two or more=============');
         /* exact matches if user supplied both fn and ln*/
         for(var k=0;k<2;k++){
@@ -51,8 +52,9 @@ function cleanResults(results,searchValue){
               }
               mtch='  (ln fn)';
            }
-           if(fullname && fullname.toLowerCase().startsWith(searchValue)){
-              var distance = levenshtein.get(searchValue, fullname, { useCollator: true});
+          swrds.forEach(function(swrd){
+           if(fullname && fullname.toLowerCase().startsWith(swrd)){
+              var distance = levenshtein.get(swrd, fullname, { useCollator: true});
               if(row.distance){
                   if(row.distance>distance){
                       row.needed=fullname+mtch;
@@ -63,6 +65,7 @@ function cleanResults(results,searchValue){
                   row.distance=distance;
                }
              }
+           });
           }
      }
      if(row.needed && !pids.includes(row['pid'])){        /*find near match of the full name*/
