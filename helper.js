@@ -8,7 +8,8 @@ function sortMyArrays(a,b) {
      }
      return dist;
 }
-function cleanResults(results,searchValue){
+function cleanResults(results,searchValue,regx){
+  console.log(regx);
   var wrds =searchValue.split(' '); /* junk array */
   searchValue='';
   /* removing spaces between words*/
@@ -79,9 +80,10 @@ function cleanResults(results,searchValue){
           if(k===0){
              tstCond=row[field] && row[field].toLowerCase().startsWith(wrd); /* start startsWith part of the word*/
           }else{
-            tstCond=row[field]; /*this nid further regx to group words that contains */
+            tstCond=row[field] && new RegExp(regx.toLowerCase()).test(row[field].toLowerCase())/*this nid further regx to group words that contains */
+            //console.log(tstCond+ ' '+row[field]+' '+regx);
           }
-          if(tstCond){
+          if(tstCond===true){
               var distance = levenshtein.get(wrd, row[field], { useCollator: true});
               var dist = levenshtein.get(wrds[0], row[field], { useCollator: true});
               if(row.distance){

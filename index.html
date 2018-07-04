@@ -27,11 +27,12 @@ th {
   <form id="formoid" action="" title="" method="post">
         <div>
             <label class="title">search Term</label>
-            <input type="text" id="search" name="search" >
+            <input type="text" id="search" name="search" placeholder="Name" >
+            <input type="text" id="st" name="st" placeholder="State">
             <input type="submit" id="submitButton"  name="submitButton" value="Search">
         </div>
  </form>
- <h2><div id ='rs'>O items found</div></h2>
+ <h2><div id ='rs'>0 Items Found</div> </h2>
     <table>
         <thead>
             <tr>
@@ -56,15 +57,17 @@ th {
       event.preventDefault();
      /* Send the data using post with element id name and name2*/
       var searchValue= $('#search').val();
+      var st= $('#st').val();
+
     // GET/READ
     //alert("response");
         $.ajax({
-            url: '/providers?name='+searchValue,
+            url: '/providers?name='+searchValue+'&st='+st,
             dataType: 'jsonp',
             success: function(data) {
                 var tbodyEl = $('tbody');
                 //alert("uuuuuuuuuuuuuuuuuuuu");
-              $('#rs').text(data.length+' items found');
+              $('#rs').text(data.length+' Items Found');
                 tbodyEl.html('');
                $.each(data, function(index, element) {
                     tbodyEl.append('\

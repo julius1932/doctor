@@ -32,22 +32,13 @@ app.get("/",function(req,res){
 
 app.get('/providers',function(req,res){
    var searchValue =req.query.name;
+	 var st=req.query.st;
+
    if(searchValue){
        searchValue=searchValue.toLowerCase();
    }
-  /*var str =searchValue;
-   var regxz;
-  for (var i = 0; i < str.length; i++) {
-    var rr='^'+str.substring(0, i+1)+'.'+str.substring(i+1, str.length)+'$';
-    if(regxz){
-      regxz+=' '+rr;
-    }else{
-        regxz=rr;
-    }
-  }
-  //console.log(regxz);
-   console.log(searchValue);
-  var query=  {$text: { $search: regxz }};*/
+
+  /*var query=  {$text: { $search: regxz }};*/
 	var arrWords=searchValue.split(' ');
 	searchValue='';
 	arrWords.forEach(function(wrd){
@@ -55,19 +46,19 @@ app.get('/providers',function(req,res){
 	});
 	searchValue=searchValue.trim();/*removing leading spaces*/
 	arrWords=searchValue.split(' ');
+
 	var rg=searchValue;
-	var rgTxt=searchValue;
 	arrWords.forEach(function(wrd){
 		var sgtns = dictionary.getSuggestions(wrd,5,7);// array size , edit distance 7
-		rg+='|'+wrd
-		rgTxt+=' [a z]*'+wrd+'[a z]*'
+		rg+='|'+wrd;
+		if(wrd.length>=4){
+			rg+='|'+wrd.substring(0,3);/* MATCHING FIRST 3 LETTERS*/
+		}
 		sgtns.forEach(function(sgtn){
 			if(rg){
-				 rg+='|'+sgtn
-				 rgTxt+=' [a z]*'+sgtn+'[a z]*'
+				 rg+='|'+sgtn;
 			}else{
 				rg=sgtn;
-				rgTxt=' [a z]*'+sgtn+'[a z]*'
 			}
 		});
 	});
@@ -80,17 +71,20 @@ app.get('/providers',function(req,res){
 	});
 	var query={ $or:arrQr};
 	console.log(arrQr);
+	if(st){
+			 query={ $text:{ $search: st},$or:arrQr};
+	}
   //var query=  { $regex :{'Provider First Name': new RegExp(regxz) }};
   MongoClient.connect(urlll, function(rr, db) {
       if (rr) {isfound=false; return;};
       var dbo = db.db("doc_db");
-      //dbo.collection("drs").createIndex({ 'fn': "text",'ln':"text" });
+      //dbo.collection("drs").createIndex({ 'fn': "text",'ln':"text" ,'s':"text"});
       dbo.collection("drs").find(query).toArray(function(errr, reslts) {
-          if (errr) {throw errr;return;}
+					if (errr) {throw errr;return;}
             console.log(reslts.length);
-            var arr =cleanResults(reslts,searchValue);
+            var arr =cleanResults(reslts,searchValue,rg);
             console.log(arr.length);
-           res.jsonp(arr);
+            res.jsonp(arr);
           //res.render('hom',{results :arr,num:arr.length});
       });
     })
